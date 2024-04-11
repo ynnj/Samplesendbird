@@ -23,7 +23,7 @@ class MainChannelTabbarController: UITabBarController {
     var subscriptionNavigationController = UINavigationController()
     var mySettingsNavigationController = UINavigationController()
 
-    
+//    TEST IF GIT CONTROL IS WORKING FOR ANY CHANGES
     var theme: SBUComponentTheme = SBUTheme.componentTheme
     var isDarkMode: Bool = false
 
