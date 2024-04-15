@@ -41,7 +41,6 @@ class AdditionalFeaturesManager: BaseCustomManager {
             #endif
             
             
-            
             // Move to ChannelViewController using customized components
             self.navigationController?.pushViewController(channelVC, animated: true)
         }

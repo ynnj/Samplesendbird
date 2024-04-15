@@ -20,7 +20,7 @@
                                 <rect key="frame" x="114.5" y="439" width="185" height="32"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vZG-c1-D8f">
-                                <rect key="frame" x="0.0" y="440" width="414" height="21"/>
+                                <rect key="frame" x="0.0" y="435" width="414" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <attributedString key="attributedText">
                                     <fragment content="chatwithme.">

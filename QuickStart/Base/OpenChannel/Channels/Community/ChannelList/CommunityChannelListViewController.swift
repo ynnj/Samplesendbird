@@ -42,6 +42,7 @@ class CommunityChannelListViewController: SBUOpenChannelListViewController {
     
     /// - NOTE: **(Method 1)** You can customize *right bar button action* by overriding `baseChannelListModule(_:didTapRightItem:)` delegate method.
     override func baseChannelListModule(_ headerComponent: SBUBaseChannelListModule.Header, didTapRightItem rightItem: UIBarButtonItem) {
+        
         let createOpenChannelVC = CreateCommunityChannelViewController()
         self.navigationController?.pushViewController(createOpenChannelVC, animated: true)
     }

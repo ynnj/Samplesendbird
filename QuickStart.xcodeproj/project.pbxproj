@@ -340,6 +340,10 @@
 		B029BC4CC29C54C6CF5E0996 /* SBUUserMessageCellParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CDC4C56C5F52CEF5FD5003C /* SBUUserMessageCellParams.swift */; };
 		B081A570DC2E2655D405C11D /* SBUChannelListViewController.Deprecated.swift in Sources */ = {isa = PBXBuildFile; fileRef = B0AB768C81DF74F76765D832 /* SBUChannelListViewController.Deprecated.swift */; };
 		B1066D19A1B33C0F0EBFDEFE /* SBUMenuSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E282B2DF613DA9229FFC1D81 /* SBUMenuSheetViewController.swift */; };
+		B19046432BC8313A00855A03 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = B19046422BC8313A00855A03 /* FirebaseAnalytics */; };
+		B19046452BC8313A00855A03 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B19046442BC8313A00855A03 /* FirebaseAnalyticsSwift */; };
+		B190464B2BC8324700855A03 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = B190464A2BC8324700855A03 /* FirebaseAnalytics */; };
+		B190464D2BC8324700855A03 /* FirebaseAnalyticsSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B190464C2BC8324700855A03 /* FirebaseAnalyticsSwift */; };
 		B1E7593C5020A893FEABC254 /* SBUChatNotificationCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7BFDECC8FD754C4852B2F11E /* SBUChatNotificationCell.swift */; };
 		B2614F7C7A3914361C030A42 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0AD29B328119BA707FC03A52 /* Assets.xcassets */; };
 		B262D70C7619443B7741131C /* SBUMarginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8DB9AC79B911C123DDF07B84 /* SBUMarginView.swift */; };
@@ -947,6 +951,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B190464D2BC8324700855A03 /* FirebaseAnalyticsSwift in Frameworks */,
+				B190464B2BC8324700855A03 /* FirebaseAnalytics in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -954,8 +960,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B19046452BC8313A00855A03 /* FirebaseAnalyticsSwift in Frameworks */,
 				9C2A3C5B28863A9E0052F71D /* SendbirdChatSDK in Frameworks */,
 				9C5DCD49242AFA7C00C41106 /* UserNotifications.framework in Frameworks */,
+				B19046432BC8313A00855A03 /* FirebaseAnalytics in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2649,6 +2657,10 @@
 			dependencies = (
 			);
 			name = NotificationService;
+			packageProductDependencies = (
+				B190464A2BC8324700855A03 /* FirebaseAnalytics */,
+				B190464C2BC8324700855A03 /* FirebaseAnalyticsSwift */,
+			);
 			productName = NotificationService;
 			productReference = 9C3EBE2028091D2A00B5366B /* NotificationService.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -2671,6 +2683,8 @@
 			name = QuickStart;
 			packageProductDependencies = (
 				9C2A3C5A28863A9E0052F71D /* SendbirdChatSDK */,
+				B19046422BC8313A00855A03 /* FirebaseAnalytics */,
+				B19046442BC8313A00855A03 /* FirebaseAnalyticsSwift */,
 			);
 			productName = "SendBirdUIKit-Sample";
 			productReference = 9C777D57241B9022006FFE25 /* QuickStart.app */;
@@ -2705,6 +2719,7 @@
 			mainGroup = 9C777D4E241B9022006FFE25;
 			packageReferences = (
 				9C2A3C5928863A9E0052F71D /* XCRemoteSwiftPackageReference "sendbird-chat-sdk-ios" */,
+				B19046412BC8313A00855A03 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			productRefGroup = 9C777D58241B9022006FFE25 /* Products */;
 			projectDirPath = "";
@@ -3528,6 +3543,14 @@
 				kind = branch;
 			};
 		};
+		B19046412BC8313A00855A03 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 10.24.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -3535,6 +3558,26 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 9C2A3C5928863A9E0052F71D /* XCRemoteSwiftPackageReference "sendbird-chat-sdk-ios" */;
 			productName = SendbirdChatSDK;
+		};
+		B19046422BC8313A00855A03 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B19046412BC8313A00855A03 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		B19046442BC8313A00855A03 /* FirebaseAnalyticsSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B19046412BC8313A00855A03 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsSwift;
+		};
+		B190464A2BC8324700855A03 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B19046412BC8313A00855A03 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		B190464C2BC8324700855A03 /* FirebaseAnalyticsSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B19046412BC8313A00855A03 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

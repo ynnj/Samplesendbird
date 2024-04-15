@@ -103,14 +103,14 @@ extension ChannelListCustomManager {
     
     func headerComponent() {
         SBUModuleSet.GroupChannelListModule.HeaderComponent = CustomChannelListModule.Header.self
-        
+        print("hello world")
         let channelListVC = ChannelListVC_CustomHeader()
         self.navigationController?.pushViewController(channelListVC, animated: true)
     }
     
     func listCompponent() {
         SBUModuleSet.GroupChannelListModule.ListComponent = CustomChannelListModule.List.self
-        
+        print("hello world")
         let channelListVC = ChannelListVC_CustomList()
         self.navigationController?.pushViewController(channelListVC, animated: true)
     }

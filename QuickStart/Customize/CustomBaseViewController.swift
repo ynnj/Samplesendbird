@@ -109,6 +109,7 @@ class CustomBaseViewController: UITableViewController {
     func startDefault() {
         SBUTheme.set(theme: .light)
         let channelListVC = SBUGroupChannelListViewController()
+        print("hello world")
         self.navigationController?.pushViewController(channelListVC, animated: true)
     }
 }

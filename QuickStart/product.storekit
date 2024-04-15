@@ -1,81 +1,7 @@
 {
   "identifier" : "B10D8D97",
   "nonRenewingSubscriptions" : [
-    {
-      "displayPrice" : "0.99",
-      "familyShareable" : false,
-      "internalID" : "E8783200",
-      "localizations" : [
-        {
-          "description" : "",
-          "displayName" : "",
-          "locale" : "en_US"
-        }
-      ],
-      "productID" : "user2",
-      "referenceName" : "user2",
-      "type" : "NonRenewingSubscription"
-    },
-    {
-      "displayPrice" : "0.99",
-      "familyShareable" : false,
-      "internalID" : "1C8A4CAE",
-      "localizations" : [
-        {
-          "description" : "",
-          "displayName" : "",
-          "locale" : "en_US"
-        }
-      ],
-      "productID" : "user1",
-      "referenceName" : "user1",
-      "type" : "NonRenewingSubscription"
-    },
-    {
-      "displayPrice" : "0.99",
-      "familyShareable" : false,
-      "internalID" : "EDE0D7D8",
-      "localizations" : [
-        {
-          "description" : "",
-          "displayName" : "",
-          "locale" : "en_US"
-        }
-      ],
-      "productID" : "sendbird",
-      "referenceName" : "sendbird",
-      "type" : "NonRenewingSubscription"
-    },
-    {
-      "displayPrice" : "0.99",
-      "familyShareable" : false,
-      "internalID" : "1FA4D3A5",
-      "localizations" : [
-        {
-          "description" : "",
-          "displayName" : "",
-          "locale" : "en_US"
-        }
-      ],
-      "productID" : "hoon004",
-      "referenceName" : "hoon004",
-      "type" : "NonRenewingSubscription"
-    },
-    {
-      "displayPrice" : "0.99",
-      "familyShareable" : false,
-      "internalID" : "66E9243B",
-      "localizations" : [
-        {
-          "description" : "",
-          "displayName" : "",
-          "locale" : "en_US"
-        }
-      ],
-      "productID" : "hoon751",
-      "referenceName" : "hoon751",
-      "type" : "NonRenewingSubscription"
-    }
+
   ],
   "products" : [
 
@@ -191,6 +117,56 @@
           "productID" : "subscription.monthly",
           "recurringSubscriptionPeriod" : "P1M",
           "referenceName" : "Monthly",
+          "subscriptionGroupID" : "527A6C86",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "0.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "FBA1632A",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Subscription for Hoon004",
+              "displayName" : "hoon004",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "hoon004",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "hoon004",
+          "subscriptionGroupID" : "527A6C86",
+          "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "0.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "8BBCEA84",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "Subscription for Sendbird",
+              "displayName" : "Subscription for Sendbird",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "sendbird",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "sendbird",
           "subscriptionGroupID" : "527A6C86",
           "type" : "RecurringSubscription"
         }

@@ -71,19 +71,6 @@ class MainChannelTabbarController: UITabBarController {
     
     public func setupStyles() {
         self.theme = SBUTheme.componentTheme
-//        self.tabBar.barTintColor = #colorLiteral(red: 0.3960784314, green: 0.7725490196, blue: 0.6352941176, alpha: 1)
-//        self.tabBar.tintColor = .black
-    
-
-//        self.tabBar.barTintColor = self.isDarkMode
-//            ? SBUColorSet.background600
-//            : .white
-//        self.tabBar.tintColor = self.isDarkMode
-//            ? SBUColorSet.primary200
-//            : SBUColorSet.primary300
-//        
-//        
-        
         
 //        testViewController.navigationItem.leftBarButtonItem = self.createLeftTitleItem(
 //            text: "Feed"
