@@ -9,7 +9,7 @@ import UIKit
 import SendbirdChatSDK
 
 enum TabType {
-    case channels, mySettings, subscription
+    case channels, mySettings, subscription, login
 }
 
 
@@ -18,12 +18,13 @@ class MainChannelTabbarController: UITabBarController {
     let channelsViewController = ChannelListViewController()
     let subscriptionViewController = SBUCreateChannelViewController()
     let settingsViewController = MySettingsViewController()
+    let loginViewController = LoginViewController()
     
     var channelsNavigationController = UINavigationController()
     var subscriptionNavigationController = UINavigationController()
     var mySettingsNavigationController = UINavigationController()
+    var loginNavigationController = UINavigationController()
 
-//    TEST IF GIT CONTROL IS WORKING FOR ANY CHANGES
     var theme: SBUComponentTheme = SBUTheme.componentTheme
     var isDarkMode: Bool = false
 
@@ -46,12 +47,17 @@ class MainChannelTabbarController: UITabBarController {
             rootViewController: settingsViewController
         )
         
+        self.loginNavigationController = UINavigationController(
+            rootViewController: loginViewController
+        )
+        
 
         
         let tabbarItems = [
             self.channelsNavigationController,
             self.subscriptionNavigationController,
-            self.mySettingsNavigationController
+            self.mySettingsNavigationController,
+            self.loginNavigationController
         ]
         self.viewControllers = tabbarItems
         self.setupStyles()
@@ -79,15 +85,24 @@ class MainChannelTabbarController: UITabBarController {
         channelsViewController.navigationItem.leftBarButtonItem = self.createLeftTitleItem(
             text: "Chats"
         )
-        settingsViewController.tabBarItem = self.createTabItem(type: .mySettings)
+        channelsViewController.tabBarItem = self.createTabItem(type: .channels)
+        
+        
         subscriptionViewController.navigationItem.leftBarButtonItem = self.createLeftTitleItem(
             text: "Discover"
         )
-        channelsViewController.tabBarItem = self.createTabItem(type: .channels)
+        subscriptionViewController.tabBarItem = self.createTabItem(type: .subscription)
+        
         settingsViewController.navigationItem.leftBarButtonItem = self.createLeftTitleItem(
             text: "Settings"
         )
-        subscriptionViewController.tabBarItem = self.createTabItem(type: .subscription)
+        settingsViewController.tabBarItem = self.createTabItem(type: .mySettings)
+        
+        loginViewController.navigationItem.leftBarButtonItem = self.createLeftTitleItem(
+            text: "Login"
+        )
+        loginViewController.tabBarItem = self.createTabItem(type: .login)
+        
 
         self.channelsNavigationController.navigationBar.barStyle = self.isDarkMode
             ? .black
@@ -96,6 +111,9 @@ class MainChannelTabbarController: UITabBarController {
             ? .black
             : .default
         self.mySettingsNavigationController.navigationBar.barStyle = self.isDarkMode
+            ? .black
+            : .default
+        self.loginNavigationController.navigationBar.barStyle = self.isDarkMode
             ? .black
             : .default
     }
@@ -135,6 +153,10 @@ class MainChannelTabbarController: UITabBarController {
             title = "Settings"
             icon = UIImage(named: "iconSettingsFilled")?.resize(with: iconSize)
             tag = 3
+        case .login:
+            title = "Login"
+            icon = UIImage(named: "iconSettingsFilled")?.resize(with: iconSize)
+            tag = 2
         }
 
         let item = UITabBarItem(title: title, image: icon, tag: tag)

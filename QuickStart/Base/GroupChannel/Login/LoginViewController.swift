@@ -11,20 +11,15 @@ import SendbirdChatSDK
 import Photos
 import MobileCoreServices
 import StoreKit
+import SwiftUI
 
-enum MySettingsCellType: Int {
-    case darkTheme, doNotDisturb, signOut
-}
 
-protocol MySettingsDelegate: AnyObject {
-    func signOutAndNavigateToConnectView()
-    
-}
-
-open class MySettingsViewController: UIViewController, UINavigationControllerDelegate {
+open class LoginViewController: UIViewController, UINavigationControllerDelegate {
     
     weak var delegate: MySettingsDelegate?
     weak var mainViewController: ViewController?
+    let viewModel = AuthenticationViewModel()
+
     
     // MARK: - Properties
     lazy var rightBarButton: UIBarButtonItem = {
@@ -44,7 +39,7 @@ open class MySettingsViewController: UIViewController, UINavigationControllerDel
     var theme: SBUChannelSettingsTheme = SBUTheme.channelSettingsTheme
     
     var isDoNotDisturbOn: Bool = false
-
+    
     
     // MARK: - Constant
     private let actionSheetIdEdit = 1
@@ -58,8 +53,8 @@ open class MySettingsViewController: UIViewController, UINavigationControllerDel
         self.navigationItem.rightBarButtonItem = self.rightBarButton
         
         // tableView
-        self.tableView.delegate = self
-        self.tableView.dataSource = self
+        //        self.tableView.delegate = self
+        //        self.tableView.dataSource = self
         self.tableView.bounces = false
         self.tableView.alwaysBounceVertical = false
         self.tableView.separatorColor =  UIColor.clear
@@ -97,7 +92,7 @@ open class MySettingsViewController: UIViewController, UINavigationControllerDel
             equalTo: self.view.trailingAnchor,
             constant: 0)
         )
-
+        
         layoutConstraints.append(self.tableView.leadingAnchor.constraint(
             equalTo: self.view.leadingAnchor,
             constant: 0)
@@ -138,7 +133,7 @@ open class MySettingsViewController: UIViewController, UINavigationControllerDel
         self.view.backgroundColor = theme.backgroundColor
         self.tableView.backgroundColor = theme.backgroundColor
     }
-
+    
     open override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
@@ -173,7 +168,19 @@ open class MySettingsViewController: UIViewController, UINavigationControllerDel
     // MARK: - Life cycle
     open override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.separatorStyle = .none
+
+        // Create a UIHostingController for AuthenticatedView
+         let authenticatedViewHostingController = UIHostingController(rootView: AuthenticatedView {
+             UserProfileView()
+         }.environmentObject(viewModel))
+         
+         // Set the size of the hosted view
+         authenticatedViewHostingController.view.frame = view.bounds
+         
+         // Add the hosted view as a child view controller
+         addChild(authenticatedViewHostingController)
+         view.addSubview(authenticatedViewHostingController.view)
+         authenticatedViewHostingController.didMove(toParent: self)
     }
     
     open override func viewDidAppear(_ animated: Bool) {
@@ -181,11 +188,18 @@ open class MySettingsViewController: UIViewController, UINavigationControllerDel
         self.tabBarController?.tabBar.isHidden = false
         self.tableView.separatorStyle = .none
     }
-
+    
     open override var preferredStatusBarStyle: UIStatusBarStyle {
         return theme.statusBarStyle
     }
     
+    @objc func loginButtonTapped() {
+        // Create a HostingController for the LoginView
+        let loginViewHostingController = UIHostingController(rootView: LoginView().environmentObject(viewModel))
+        
+        // Present the LoginView modally
+        present(loginViewHostingController, animated: true, completion: nil)
+    }
     
     // MARK: - SDK related
     func loadDisturbSetting(_ completionHandler: @escaping (() -> Void)) {
@@ -234,8 +248,8 @@ open class MySettingsViewController: UIViewController, UINavigationControllerDel
         SBUActionSheet.show(
             items: [changeNameItem, changeImageItem],
             cancelItem: cancelItem,
-            identifier: actionSheetIdEdit,
-            delegate: self
+            identifier: actionSheetIdEdit
+            //            delegate: self
         )
     }
     
@@ -254,14 +268,14 @@ open class MySettingsViewController: UIViewController, UINavigationControllerDel
             self.present(navigationController, animated: true, completion: nil)
         }
     }
-
+    
     
     /// Open the nickname change popup.
     public func changeNickname() {
         let okButton = SBUAlertButtonItem(title: SBUStringSet.OK) {[weak self] newNickname in
             guard let nickname = newNickname as? String,
-                nickname.trimmingCharacters(in: .whitespacesAndNewlines).count > 0
-                else { return }
+                  nickname.trimmingCharacters(in: .whitespacesAndNewlines).count > 0
+            else { return }
             
             // Sendbird provides various access control options when using the Chat SDK. By default, the Allow retrieving user list attribute is turned on to facilitate creating sample apps. However, this may grant access to unwanted data or operations, leading to potential security concerns. To manage your access control settings, you can turn on or off each setting on Sendbird Dashboard.
             SendbirdUI.updateUserInfo(nickname: nickname, profileURL: nil) { (error) in
@@ -308,53 +322,24 @@ open class MySettingsViewController: UIViewController, UINavigationControllerDel
         SBUActionSheet.show(
             items: [cameraItem, libraryItem],
             cancelItem: cancelItem,
-            identifier: actionSheetIdPicker,
-            delegate: self
+            identifier: actionSheetIdPicker
+            //            delegate: self
         )
     }
     
-    open func changeDarkThemeSwitch(isOn: Bool) {
-        SBUTheme.set(theme: isOn ? .dark : .light)
-        
-        guard let tabbarController = self.tabBarController as? MainChannelTabbarController else { return }
-        tabbarController.updateTheme(isDarkMode: isOn)
-        self.userInfoView.setupStyles()
-        self.tableView.reloadData()
-    }
+    
     
     func changeDisturbSwitch(isOn: Bool, _ completionHandler: ((Bool) -> Void)? = nil) {
         self.changeDisturb(isOn: isOn, completionHandler)
     }
- 
-
-    @objc func signOutAction() {
-        print("Sign-out action triggered")
-        delegate?.signOutAndNavigateToConnectView()
-
-        // Instantiate the storyboard
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-
-        // Instantiate the view controller from the storyboard using its identifier
-        guard let viewController = storyboard.instantiateViewController(withIdentifier: "Main") as? ViewController else {
-            fatalError("Unable to instantiate view controller from storyboard.")
-        }
-   
-        SendbirdUI.unregisterPushToken { success in
-            SendbirdUI.disconnect { [weak self] in
-                print("SendbirdUIKit.disconnect")
-                viewController.isSignedIn = false
-                print("sign out works")
-            }
-        }
-
-        // Present or push the view controller
-        viewController.modalPresentationStyle = .fullScreen
-        self.present(viewController, animated: true, completion: nil)
-    }
-
     
     
-// PURCHASE BUTTON LOGIC
+    
+    
+    
+    
+    
+    // PURCHASE BUTTON LOGIC
     // Enum to represent product identifiers
     enum ProductIdentifier: String {
         case subscriptionMonthly = "subscription.monthly"
@@ -363,217 +348,33 @@ open class MySettingsViewController: UIViewController, UINavigationControllerDel
     }
     
     
-    // Handle purchase button tap
-    @objc func purchaseButtonTapped() {
-        initiatePurchase()
-    }
-
     
-
     // Method to initiate the in-app purchase process
     func initiatePurchase() {
         guard SKPaymentQueue.canMakePayments() else {
             // Handle case where in-app purchases are disabled
             return
         }
-
-
+        
+        
         // Retrieve the product identifier from your StoreKit configuration file
         guard let productIdentifier = ProductIdentifier(rawValue: "subscription.monthly") else {
             // Handle error: Product identifier not found
             return
         }
-
+        
         // Request product information from the App Store for the given product identifier
         let productRequest = SKProductsRequest(productIdentifiers: [productIdentifier.rawValue])
-        productRequest.delegate = self
+        //        productRequest.delegate = self
         productRequest.start()
     }
     
     
-}
-
-
-// MARK: - UITableView relations
-extension MySettingsViewController: UITableViewDataSource, UITableViewDelegate {
-    open func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let rowValue = indexPath.row
-        let type = MySettingsCellType(rawValue: rowValue)
-        switch type {
-        case .signOut:
-            self.signOutAction()
-        default:
-            break
-        }
-    }
-    
-    open func tableView(_ tableView: UITableView,
-                        cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: MySettingsCell.sbu_className
-            ) as? MySettingsCell else { fatalError() }
-
-        cell.selectionStyle = .none
-        
-        let isDarkMode = (self.tabBarController as? MainChannelTabbarController)?.isDarkMode ?? false
-
-        let rowValue = indexPath.row
-        if let type = MySettingsCellType(rawValue: rowValue) {
-            cell.configure(type: type, isDarkMode: isDarkMode)
-
-            switch type {
-                case .darkTheme:
-                    cell.switchAction = { [weak self] isOn in
-                        self?.changeDarkThemeSwitch(isOn: isOn)
-                    }
-                case .doNotDisturb:
-                    cell.changeSwitch(self.isDoNotDisturbOn)
-                    cell.switchAction = { [weak self] isOn in
-                        self?.changeDisturb(isOn: isOn, { success in
-                            if !success {
-                                cell.changeBackSwitch()
-                            } else {
-                                self?.isDoNotDisturbOn = isOn
-                            }
-                        })
-                    }
-                case .signOut: break
-            }
-        }
-
-        return cell
-    }
-    
-    open func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
-    }
-}
-
-
-// MARK: SBUActionSheetDelegate
-extension MySettingsViewController: SBUActionSheetDelegate {
-    public func didSelectActionSheetItem(index: Int, identifier: Int) {
-        if identifier == actionSheetIdEdit {
-            let type = ChannelEditType.init(rawValue: index)
-            switch type {
-            case .name:
-                self.changeNickname()
-            case .image:
-                self.selectUserImage()
-            default:
-                break
-            }
-        }
-        else {
-            let type = MediaResourceType.init(rawValue: index)
-            var sourceType: UIImagePickerController.SourceType = .photoLibrary
-            let mediaType: [String] = [String(kUTTypeImage)]
-            
-            switch type {
-            case .camera:
-                sourceType = .camera
-            case .library:
-                sourceType = .photoLibrary
-            default:
-                break
-            }
-            
-            if type != .document {
-                if UIImagePickerController.isSourceTypeAvailable(sourceType) {
-                    let imagePickerController = UIImagePickerController()
-                    imagePickerController.delegate = self
-                    imagePickerController.sourceType = sourceType
-                    imagePickerController.mediaTypes = mediaType
-                    self.present(imagePickerController, animated: true, completion: nil)
-                }
-            }
-        }
-    }
-}
-
-
-// MARK: UIImagePickerViewControllerDelegate
-extension MySettingsViewController: UIImagePickerControllerDelegate {
-    public func imagePickerController(
-        _ picker: UIImagePickerController,
-        didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        
-        picker.dismiss(animated: true) { [weak self] in
-            guard let originalImage = info[.originalImage] as? UIImage else { return }
-            
-            self?.userInfoView.coverImage.image = originalImage
-            
-            // Sendbird provides various access control options when using the Chat SDK. By default, the Allow retrieving user list attribute is turned on to facilitate creating sample apps. However, this may grant access to unwanted data or operations, leading to potential security concerns. To manage your access control settings, you can turn on or off each setting on Sendbird Dashboard.
-            SendbirdUI.updateUserInfo(
-                nickname: nil,
-                profileImage: originalImage.jpegData(compressionQuality: 0.5)
-            ) { error in
-                guard error == nil else {
-                    SBULog.error(error?.localizedDescription)
-                    return
-                }
-                guard let user = SBUGlobals.currentUser else { return }
-                self?.userInfoView.configure(user: user)
-            }
-        }
-    }
-}
-
-// MARK: - SKProductsRequestDelegate
-extension MySettingsViewController: SKProductsRequestDelegate {
-    public func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
-        let products = response.products
-        guard let product = products.first else {
-            // Handle error: No products found
-            return
-        }
-        purchaseProduct(product)
-    }
-    
-    public func purchaseProduct(_ product: SKProduct) {
-        let payment = SKPayment(product: product)
-        SKPaymentQueue.default().add(payment)
-    }
     
     
-    public func request(_ request: SKRequest, didFailWithError error: Error) {
-        // Handle request failure
-        print("Product request failed with error: \(error.localizedDescription)")
-    }
+    
+    
+    
+    
+    
 }
-
-extension MySettingsViewController: SKPaymentTransactionObserver {
-    public func paymentQueue(_ queue: SKPaymentQueue, updatedTransactions transactions: [SKPaymentTransaction]) {
-        for transaction in transactions {
-            switch transaction.transactionState {
-            case .purchasing:
-                // Transaction is being processed
-                print("Transaction is being processed...")
-            case .purchased:
-                // Transaction is successful, provide content to the user
-                print("Transaction successful!")
-                provideContentForProduct(transaction.payment.productIdentifier)
-                queue.finishTransaction(transaction)
-            case .failed:
-                // Transaction failed
-                print("Transaction failed with error: \(transaction.error?.localizedDescription ?? "Unknown error")")
-                queue.finishTransaction(transaction)
-            case .restored:
-                // Transaction was restored
-                print("Transaction restored.")
-                provideContentForProduct(transaction.payment.productIdentifier)
-                queue.finishTransaction(transaction)
-            case .deferred:
-                // Transaction is in the queue, but its final status is pending external action
-                print("Transaction deferred.")
-            @unknown default:
-                break
-            }
-        }
-    }
-
-    func provideContentForProduct(_ productIdentifier: String) {
-        // Provide content to the user after successful purchase
-    }
-}
-

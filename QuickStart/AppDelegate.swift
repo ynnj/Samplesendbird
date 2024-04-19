@@ -7,6 +7,7 @@
 //
 
 import UIKit
+@_implementationOnly import Firebase
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
@@ -52,7 +53,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 //        }
         
         self.initializeRemoteNotification()
-        
+        FirebaseApp.configure()
         return true
     }
     
